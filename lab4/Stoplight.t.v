@@ -41,7 +41,29 @@ module StoplightTest;
 	// Main Test Logic
 	initial begin
 		// Write your set of test cases here
-
+		rst = 1;
+		#5;
+		rst = 0;
+		#35;
+		car = 1;
+		#10;
+		car = 0;
+		#15;
+		car = 1;
+		#10;
+		car = 1;
+		#10;
+		car = 0;
+		#20;
+		car = 1;
+		#10;
+		car = 0;
+		#15;
+		car = 1;
+		#5;
+		car = 0;
+		#4;
+		
 		$finish;
 	end
 

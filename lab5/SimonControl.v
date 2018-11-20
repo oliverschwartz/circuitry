@@ -8,18 +8,25 @@ module SimonControl(
 	input        rst,           // Reset
 
 	// Datapath Inputs
-	// input     localin1,
+	input     correctInput,
+	input     finishedSequence,
+	input 	  validInput,
+
 
 	// Datapath Control Outputs
-	// output    control1,
+	output    reg [1:0] current_state,
+	output 	  reg count,
+	output    reg reset,
+	output    reg done,
+
 
 	// External Outputs
-	// output [2:0] mode_leds
+	output [2:0] mode_leds
 );
 
 	// Declare Local Vars Here
-	// reg [X:0] state;
-	// reg [X:0] next_state;
+	reg [1:0] state;
+	reg [1:0] next_state;
 
 	// LED Light Parameters
 	localparam LED_MODE_INPUT    = 3'b001;
@@ -28,7 +35,10 @@ module SimonControl(
 	localparam LED_MODE_DONE     = 3'b111;
 
 	// Declare State Names Here
-	//localparam STATE_ONE = 2'd0;
+	localparam STATE_ONE   = 2'd0;
+	localparam STATE_TWO   = 2'd1;
+	localparam STATE_THREE = 2'd2;
+	localparam STATE_FOUR  = 2'd3;
 
 	// Output Combinational Logic
 	always @( * ) begin
@@ -41,18 +51,18 @@ module SimonControl(
 	// Next State Combinational Logic
 	always @( * ) begin
 		// Write your Next State Logic Here
-		// next_state = ???
+		next_state = state
 	end
 
 	// State Update Sequential Logic
 	always @(posedge clk) begin
 		if (rst) begin
 			// Update state to reset state
-			// state <= STATE_ONE;
+			state <= STATE_ONE;
 		end
 		else begin
 			// Update state to next state
-			// state <= next_state;
+			state <= next_state;
 		end
 	end
 

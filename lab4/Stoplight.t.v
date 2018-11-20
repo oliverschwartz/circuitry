@@ -40,30 +40,98 @@ module StoplightTest;
 
 	// Main Test Logic
 	initial begin
-		// Write your set of test cases here
-		rst = 1;
-		#5;
-		rst = 0;
-		#35;
-		car = 1;
-		#10;
-		car = 0;
-		#15;
-		car = 1;
-		#10;
-		car = 1;
-		#10;
-		car = 0;
-		#20;
-		car = 1;
-		#10;
-		car = 0;
-		#15;
-		car = 1;
-		#5;
-		car = 0;
-		#4;
+		// reset goes high
+		$display("\nTime 1: Resetting the Controller (Washington -> GREEN)...");
+		#1; rst = 1; @(posedge clk);
 		
+		// reset goes low
+		$display("\nTime 6: Reset goes to low (Washington stays on GREEN)...");
+		#4; rst = 0; @(posedge clk);
+		#1;
+
+		// check correct colours
+		if (lp != RED || lw != GRN) begin
+			$display("Error at time %t", $time);
+		end
+		
+		// car signal goes high (car waiting on prospect)
+		$display("\nTime 41: Car arrives on prospect (Washington -> YELLOW)...");
+		#34; car = 1; @(posedge clk);
+		#1;
+		if (lp != RED || lw != YLW) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#4; // at time 46 
+		$display("\nTime 46: Car still waiting (Prospect -> GREEN)...");
+		#1;
+		if (lp != GRN || lw != RED) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#4; car = 0; @(posedge clk); // at time 51
+		$display("\nTime 51: Car gets green, has moved, car signal goes low ...");
+		#1;
+		if (lp != GRN || lw != RED) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#14; car = 1; @(posedge clk); // at time 66
+		$display("\nTime 66: Prospect green for 20 sec. More cars arrive (Prospect -> YELLOW) ...");
+		#1;
+		if (lp != YLW || lw != RED) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#4; // at time 71
+		$display("\nTime 71: Car signal still high, light finishes change (Washington -> GREEN, Propsect -> RED) ...");
+		#1;
+		if (lp != RED || lw != GRN) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#4; // at time 76
+		$display("\nTime 76: One car still trapped on Prospect ...");
+		#1;
+		if (lp != RED || lw != GRN) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#9; car = 0; @(posedge clk); // at time 86
+		$display("\nTime 86: Car makes right on red, car signal low ...");
+		#1;
+		if (lp != RED || lw != GRN) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#19; car = 1; @(posedge clk); // at time 106
+		$display("\nTime 106: Car appears, signal goes high (Washigton -> YELLOW) ...");
+		#1;
+		if (lp != RED || lw != YLW) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#9; car = 0; @(posedge clk); // at time 116
+		$display("\nTime 116: Car turns, signal goes low (Washigton is RED) ...");
+		#1;
+		if (lp != GRN || lw != RED) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#14; car = 1; @(posedge clk); // at time 131
+		$display("\nTime 131: Another car shows up (but it has been 20 sec.) ...");
+		#1;
+		if (lp != YLW || lw != RED) begin
+			$display("Error at time %t", $time);
+		end
+		
+		#4; car = 0; @(posedge clk); // at time 136
+		$display("\nTime 136: Last car leaves ...");
+		#1;
+		if (lp != RED || lw != GRN) begin
+			$display("Error at time %t", $time);
+		end
+		#3; 
 		$finish;
 	end
 

@@ -9,6 +9,7 @@ module SimonDatapath(
 	input        clk,           // Clock
 	input        level,         // Switch for setting level
 	input  [3:0] pattern,       // Switches for creating pattern
+	input  [1:0] state,
 
 	// Datapath Control Signals
 	// input     control1;

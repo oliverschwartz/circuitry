@@ -34,7 +34,7 @@ module PUnCControl(
 	output wire [1:0] pc_ld_data_sel,
 
 	// ALU controls
-	output wire [1:0] alu_sel
+	output wire [2:0] alu_sel
 );
 
 	// FSM States
@@ -64,6 +64,7 @@ module PUnCControl(
 		pc_clr = 1'd0;
 		pc_inc = 1'd0;
 		pc_ld_data_sel = 2'd0;
+		alu_sel = 3'd0;
 
 		case (state)
 			STATE_INIT: begin
@@ -78,63 +79,83 @@ module PUnCControl(
 
 			STATE_EXECUTE: begin
 				case (ir[`OC])
-					`OC_ADD begin
+					`OC_ADD: begin
 						if (ir[5] == 0) begin
 							rf_w_addr_sel = 1'b0;
 							rf_w_data_sel = 2'b00;
-							rf_w_en = 1'b0;
+							rf_w_en = 1'b1;
+							rf_r0_addr_sel = 1'b0;
+							rf_r1_addr_sel = 1'b0;
+							alu_sel = 3'b000;
+						end
+						else begin
+							rf_w_addr_sel = 1'b0;
+							rf_w_data_sel = 2'b00;
+							rf_w_en = 1'b1;
+							alu_sel = 3'b001;
+							rf_r0_addr_sel = 1'b0;
+						end
+					end
+
+					`OC_AND: begin
+						if (ir[5] == 0) begin
+							rf_w_addr_sel = 1'b0;
+							rf_w_data_sel = 2'b00;
+							rf_w_en = 1'b1;
+							alu_sel = 3'b011;
 							rf_r0_addr_sel = 1'b0;
 							rf_r1_addr_sel = 1'b0;
 						end
 						else begin
+							rf_w_addr_sel = 1'b0;
+							rf_w_data_sel = 2'b00;
+							rf_w_en = 1'b1;
+							alu_sel = 3'b101;
+							rf_r0_addr_sel = 1'b0;
 						end
 					end
 
-					`OC_AND begin
+					`OC_BR: begin
+
+					end
+
+					`OC_JMP: begin
+						pc_ld_data_sel = ;
+					end
+
+					`OC_JSR: begin
 						if () begin
-							end
+						end
 						else begin
 						end
 					end
 
-					`OC_BR begin
+					`OC_LD: begin
 					end
 
-					`OC_JMP begin
+					`OC_LDI: begin
 					end
 
-					`OC_JSR begin
-						if () begin
-						end
-						else begin
-						end
+					`OC_LDR: begin
 					end
 
-					`OC_LD begin
+					`OC_LEA: begin
 					end
 
-					`OC_LDI begin
+					`OC_NOT: begin
+						alu_sel = 3'b110;
 					end
 
-					`OC_LDR begin
+					`OC_ST: begin
 					end
 
-					`OC_LEA begin
+					`OC_STI: begin
 					end
 
-					`OC_NOT begin
+					`OC_STR: begin
 					end
 
-					`OC_ST begin
-					end
-
-					`OC_STI begin
-					end
-
-					`OC_STR begin
-					end
-
-					`OC_HLT begin
+					`OC_HLT: begin
 					end
 				endcase
 			end
@@ -145,12 +166,20 @@ module PUnCControl(
 	always @( * ) begin
 		next_state = state;
 
-		// Add your next-state logic here
-		//case (state)
-		//	STATE_FETCH: begin
-		//
-		//	end
-		//endcase
+		case (state)
+			STATE_INIT: begin
+				next_state = STATE_FETCH;
+			end
+			STATE_FETCH: begin
+				next_state = STATE_DECODE;
+			end
+			STATE_EXECUTE: begin
+			end
+			STATE_EXECUTE_I: begin
+			end
+			STATE_HALT: begin
+			end
+		endcase
 	end
 
 	// State Update Sequential Logic

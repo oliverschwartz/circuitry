@@ -34,10 +34,12 @@
 `define BR_P 9
 
 // ALU
-`define ALU_FN_ADD  2'b00
-`define ALU_FN_NOT  2'b01
-`define ALU_FN_AND  2'b10
-`define ALU_FN_PASS 2'b11
+`define ALU_FN_ADD   3'b000
+`define ALU_FN_ADD_I 3'b001
+`define ALU_FN_NOT   3'b010
+`define ALU_FN_AND   3'b011
+`define ALU_FN_AND_I 3'b100
+`define ALU_FN_PASS  3'b101
 
 // Register File
 `define RF_R0_ADDR_SEL_A    1'b0 // read addr selects

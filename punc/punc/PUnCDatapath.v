@@ -40,7 +40,7 @@ module PUnCDatapath(
 	input wire [1:0] pc_ld_data_sel,
 
 	// ALU controls
-	input wire [1:0] alu_sel,
+	input wire [2:0] alu_sel,
 
 	// Condition code signals
 	input wire cond_ld,
@@ -182,8 +182,10 @@ module PUnCDatapath(
 	// ALU
 	//----------------------------------------------------------------------
 	assign alu_out = (alu_sel == `ALU_FN_ADD) ? (rf_r0_data + rf_r1_data) :
+					 (alu_sel == `ALU_FN_ADD_I) ? (rf_r0_data + sext_5) :
 	                 (alu_sel == `ALU_FN_NOT) ? (~rf_r0_data) :
 					 (alu_sel == `ALU_FN_AND) ? (rf_r0_data & rf_r1_data) :
+					 (alu_sel == `ALU_FN_AND_I) ? (rf_r0_data + sext_5) :
 					 (alu_sel == `ALU_FN_PASS) ? rf_r0_data;
 
 	//----------------------------------------------------------------------

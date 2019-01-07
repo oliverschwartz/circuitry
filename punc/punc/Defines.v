@@ -38,3 +38,16 @@
 `define ALU_FN_NOT  2'b01
 `define ALU_FN_AND  2'b10
 `define ALU_FN_PASS 2'b11
+
+// Register File
+`define RF_R0_ADDR_SEL_A    1'b0 // read addr selects
+`define RF_R0_ADDR_SEL_B    1'b1
+`define RF_R1_ADDR_SEL_A    1'b0
+`define RF_R1_ADDR_SEL_B    1'b1
+`define REG_A               2:0 // macros for IR bits
+`define REG_B               8:6
+`define REG_C              11:9
+`define RF_W_DATA_SEL_ALU    2'b00 // write data selects
+`define RF_W_DATA_SEL_MEM    2'b01
+`define RF_W_DATA_SEL_PC     2'b10
+

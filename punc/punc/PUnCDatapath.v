@@ -23,7 +23,9 @@ module PUnCDatapath(
 	
 	// Register file controls
 	input wire rf_w_en,
-	input wire [1:0] rf_w_data_sel, 
+	input wire [1:0] rf_w_data_sel,
+	input wire rf_r0_addr_sel,
+	input wire rf_r1_addr_sel, 
 
 	// Instruction register controls
 	input wire ir_ld, 
@@ -62,7 +64,7 @@ module PUnCDatapath(
 	assign pc_debug_data = pc;
 
 	// ALU wires
-	wire [15:0] alu_out
+	wire [15:0] alu_out;
 
 	//----------------------------------------------------------------------
 	// Memory Module
@@ -85,7 +87,14 @@ module PUnCDatapath(
 	// Register File Module
 	//----------------------------------------------------------------------
 
+	assign rf_r0_addr = (rf_r0_addr_sel == `RF_R0_ADDR_SEL_A) ? ir[`REG_B]:
+						(rf_r0_addr_sel == `RF_R0_ADDR_SEL_B) ? ir[`REG_C];
+	assign rf_r1_addr = (rf_r1_addr_sel == `RF_R1_ADDR_SEL_A) ? ir[`REG_A]:
+						(rf_r1_addr_sel == `RF_R1_ADDR_SEL_B) ? ir[`REG_B];
 
+	assign rf_w_data = (rf_w_data_sel == `RF_W_DATA_SEL_ALU) ? alu_out:
+					   (rf_w_data_sel == `RF_W_DATA_SEL_MEM) ? mem_r_data:
+					   (rf_w_data_sel == `RF_W_DATA_SEL_PC) ? pc;
 
 	// 8-entry 16-bit register file (connect other ports)
 	RegisterFile rfile(

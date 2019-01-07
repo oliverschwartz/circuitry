@@ -112,7 +112,7 @@ module SIPPControl(
                   rf_p_addr_sel  = `RF_RP_ADDR_SEL_A;
                end             
                default: begin
-
+                  
                end
             endcase
          end

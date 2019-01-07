@@ -44,6 +44,7 @@ module PUnCDatapath(
 
 	// Condition code signals
 	input wire cond_ld,
+	input wire cond_ld_data_sel,
 
 	// Output signals to control
 	output reg [15:0] ir,
@@ -78,6 +79,8 @@ module PUnCDatapath(
 
 	// PC load data
 	wire [15:0] pc_ld_data;
+
+
 
 	// Sign Extension Module
 	assign wire [15:0] sext_11 = {{5{1'b0}}, ir[`10:0]};
@@ -186,7 +189,9 @@ module PUnCDatapath(
 	//----------------------------------------------------------------------
 	// Condition code registers
 	//----------------------------------------------------------------------
-	
+	// condition code can test: alu_out OR rf_w_data
+	assign cond_data = (cond_ld_data_sel == `COND_LD_DATA_SEL_ALU) ? alu_out:
+					   (cond_ld_data_sel == `COND_LD_DATA_SEL_RF)  ? rf_w_data;
 	
 	always @(posedge clk) begin
 		if (rst) begin
@@ -195,7 +200,9 @@ module PUnCDatapath(
 			z <= 1'b0;
 		end
 		else if (cond_ld) begin
-			
+			p <= (cond_data > 16'b0);
+			n <= (cond_data < 16'b0);
+			z <= (cond_data == 16'b0);
 		end		
 	end
 

@@ -68,4 +68,8 @@
 `define PC_LD_DATA_SEL_B   = 2'b01
 `define PC_LD_DATA_SEL_C   = 2'b10
 
+// Condition Code registers
+`define COND_LD_DATA_SEL_ALU = 1'b0
+`define COND_LD_DATA_SEL_RF  = 1'b1
+
 

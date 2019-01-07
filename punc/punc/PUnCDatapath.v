@@ -25,10 +25,10 @@ module PUnCDatapath(
 	
 	// Register file controls
 	input wire rf_w_en,
-	input wire [1:0] rf_r_addr_sel,
-	input wire [1:0] rf_w_data_sel,
 	input wire rf_r0_addr_sel,
-	input wire rf_r1_addr_sel, 
+	input wire rf_r1_addr_sel,
+	input wire [1:0] rf_w_data_sel,
+	input wire rf_w_addr_sel,
 
 	// Instruction register controls
 	input wire ir_ld, 
@@ -43,7 +43,12 @@ module PUnCDatapath(
 	input wire [1:0] alu_sel,
 
 	// Output signals to control
-	output reg [15:0] ir
+	output reg [15:0] ir,
+
+	// Status registers
+	output reg n,
+	output reg p,
+	output reg z
 );
 
 	// Local Registers
@@ -75,9 +80,9 @@ module PUnCDatapath(
 
 	// Sign Extension Module
 	assign wire [15:0] sext_11 = {{5{1'b0}}, ir[`10:0]};
-	assign wire [15:0] sext_9  = {{5{1'b0}}, ir[`8:0]};
-	assign wire [15:0] sext_6  = {{5{1'b0}}, ir[`5:0]};
-	assign wire [15:0] sext_5  = {{5{1'b0}}, ir[`4:0]};
+	assign wire [15:0] sext_9  = {{7{}}, ir[`8:0]};
+	assign wire [15:0] sext_6  = {{10{ir[5]}, ir[`5:0]};
+	assign wire [15:0] sext_5  = {{11{ir[4]}}, ir[4:0]};
 
 	//----------------------------------------------------------------------
 	// Memory Module
@@ -175,6 +180,21 @@ module PUnCDatapath(
 	assign alu_out = (alu_sel == `ALU_FN_ADD) ? (rf_r0_data + rf_r1_data) :
 	                 (alu_sel == `ALU_FN_NOT) ? (~rf_r0_data) :
 					 (alu_sel == `ALU_FN_AND) ? (rf_r0_data & rf_r1_data) :
-					 (alu_sel == `ALU_FN_PASS) ? rf_r0_data
+					 (alu_sel == `ALU_FN_PASS) ? rf_r0_data;
+
+	//----------------------------------------------------------------------
+	// Condition code registers
+	//----------------------------------------------------------------------
+	always @(posedge clk) begin
+		if (rst) begin
+			n <= 1'b0;
+			p <= 1'b0;
+			z <= 1'b0;
+		end
+		else if (cond_ld) begin
+			
+		end		
+	end
+
 
 endmodule

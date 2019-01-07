@@ -14,10 +14,15 @@ module PUnCControl(
 
 	// Memory controls
 	output wire mem_w_en,
+	output wire mem_w_addr_sel,
+	output wire mem_r_addr_sel,
 
 	// Register file controls
 	output wire rf_w_en,
+	output wire rf_r0_addr_sel,
+	output wire rf_r1_addr_sel,
 	output wire [1:0] rf_w_data_sel,
+	output wire rf_w_addr_sel,
 
 	// Instruction register controls
 	output wire ir_ld,
@@ -26,36 +31,19 @@ module PUnCControl(
 	output wire pc_ld,
 	output wire pc_clr,
 	output wire pc_inc,
+	output wire [1:0] pc_ld_data_sel,
 
 	// ALU controls
 	output wire [1:0] alu_sel
 );
 
 	// FSM States
-	localparam STATE_INIT        = 5'd0;
-	localparam STATE_FETCH       = 5'd1;
-	localparam STATE_DECODE      = 5'd2;
-	localparam STATE_ADD         = 5'd3;
-	localparam STATE_ADD_I       = 5'd4;
-	localparam STATE_AND         = 5'd5;
-	localparam STATE_AND_I       = 5'd6;
-	localparam STATE_BR          = 5'd7;
-	localparam STATE_JMP_NZP     = 5'd8;
-	localparam STATE_JMP_RET     = 5'd9;
-	localparam STATE_JSR         = 5'd10;
-	localparam STATE_JSR_2       = 5'd11;
-	localparam STATE_LD          = 5'd12;
-	localparam STATE_LDI         = 5'd13;
-	localparam STATE_LDI_2       = 5'd14;
-	localparam STATE_LDR         = 5'd15;
-	localparam STATE_LDR_2       = 5'd16;
-	localparam STATE_LEA         = 5'd17;
-	localparam STATE_NOT         = 5'd18;
-	localparam STATE_RTI         = 5'd19;
-	localparam STATE_ST          = 5'd20;
-	localparam STATE_STI         = 5'd21;
-	localparam STATE_STR         = 5'd22;
-	localparam STATE_HALT        = 5'd23;
+   	localparam STATE_INIT      = 3'b000;
+   	localparam STATE_FETCH     = 3'b001;
+   	localparam STATE_DECODE    = 3'b010;
+ 	localparam STATE_EXECUTE   = 3'b011;
+   	localparam STATE_EXECUTE_I = 3'b100;
+   	localparam STATE_HALT      = 3'b101;
 
 	// State, Next State
 	reg [4:0] state, next_state;
@@ -63,6 +51,19 @@ module PUnCControl(
 	// Output Combinational Logic
 	always @( * ) begin
 		// Set default values for outputs here (prevents implicit latching)
+		mem_w_en = 1'd0;
+		mem_w_addr_sel = 1'd0;
+		mem_r_addr_sel = 1'd0;
+		rf_w_en = 1'd0;
+		rf_r_addr_sel = 2'd0;
+		rf_w_data_sel = 2'd0;
+		rf_r0_addr_sel = 1'd0;
+		rf_r1_addr_sel = 1'd0;
+		ir_ld = 1'd0;
+		pc_ld = 1'd0;
+		pc_clr = 1'd0;
+		pc_inc = 1'd0;
+		pc_ld_data_sel = 2'd0;
 
 		case (state)
 			STATE_INIT: begin
@@ -73,6 +74,69 @@ module PUnCControl(
 			end
 			STATE_DECODE: begin
 				pc_inc = 1'd1;
+			end
+
+			STATE_EXECUTE: begin
+				case (ir[`OC])
+					`OC_ADD begin
+						if (ir[5] == 0) begin
+							rf_w_addr_sel = 1'b0;
+							rf_w_data_sel = 2'b00;
+							rf_w_en = 1'b0;
+							rf_r0_addr_sel = 1'b0;
+							rf_r1_addr_sel = 1'b0;
+						end
+						else begin
+						end
+					end
+
+					`OC_AND begin
+						if () begin
+							end
+						else begin
+						end
+					end
+
+					`OC_BR begin
+					end
+
+					`OC_JMP begin
+					end
+
+					`OC_JSR begin
+						if () begin
+						end
+						else begin
+						end
+					end
+
+					`OC_LD begin
+					end
+
+					`OC_LDI begin
+					end
+
+					`OC_LDR begin
+					end
+
+					`OC_LEA begin
+					end
+
+					`OC_NOT begin
+					end
+
+					`OC_ST begin
+					end
+
+					`OC_STI begin
+					end
+
+					`OC_STR begin
+					end
+
+					`OC_HLT begin
+					end
+				endcase
 			end
 		endcase
 	end

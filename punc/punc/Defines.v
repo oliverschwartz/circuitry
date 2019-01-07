@@ -47,7 +47,25 @@
 `define REG_A               2:0 // macros for IR bits
 `define REG_B               8:6
 `define REG_C              11:9
-`define RF_W_DATA_SEL_ALU    2'b00 // write data selects
-`define RF_W_DATA_SEL_MEM    2'b01
-`define RF_W_DATA_SEL_PC     2'b10
+`define R7                  3'b111
+`define RF_W_DATA_SEL_ALU   2'b00 // write data selects
+`define RF_W_DATA_SEL_MEM   2'b01
+`define RF_W_DATA_SEL_PC    2'b10
+`define RF_W_ADDR_SEL_A     1'b0
+`define RF_W_ADDR_SEL_B     1'b1
+
+// Memory Module
+`define MEM_W_DATA_SEL_RF  = 1'b0 // write data selects
+`define MEM_W_DATA_SEL_MEM = 1'b1
+`define MEM_W_ADDR_SEL_A   = 1'b0
+`define MEM_W_ADDR_SEL_B   = 1'b1
+`define MEM_R_ADDR_SEL_PC  = 2'b00
+`define MEM_R_ADDR_SEL_A   = 2'b01
+`define MEM_R_ADDR_SEL_B   = 2'b10
+
+// Program Counter
+`define PC_LD_DATA_SEL_A   = 2'b00
+`define PC_LD_DATA_SEL_B   = 2'b01
+`define PC_LD_DATA_SEL_C   = 2'b10
+
 

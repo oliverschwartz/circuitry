@@ -20,9 +20,12 @@ module PUnCDatapath(
 
 	// Memory controls
 	input wire mem_w_en, 
+	input wire mem_w_addr_sel,
+	input wire mem_r_addr_sel,
 	
 	// Register file controls
 	input wire rf_w_en,
+	input wire [1:0] rf_r_addr_sel,
 	input wire [1:0] rf_w_data_sel,
 	input wire rf_r0_addr_sel,
 	input wire rf_r1_addr_sel, 
@@ -34,6 +37,7 @@ module PUnCDatapath(
 	input wire pc_ld,
 	input wire pc_clr,
 	input wire pc_inc,
+	input wire [1:0] pc_ld_data_sel,
 
 	// ALU controls
 	input wire [1:0] alu_sel,
@@ -66,9 +70,28 @@ module PUnCDatapath(
 	// ALU wires
 	wire [15:0] alu_out;
 
+	// PC load data
+	wire [15:0] pc_ld_data;
+
+	// Sign Extension Module
+	assign wire [15:0] sext_11 = {{5{1'b0}}, ir[`10:0]};
+	assign wire [15:0] sext_9  = {{5{1'b0}}, ir[`8:0]};
+	assign wire [15:0] sext_6  = {{5{1'b0}}, ir[`5:0]};
+	assign wire [15:0] sext_5  = {{5{1'b0}}, ir[`4:0]};
+
 	//----------------------------------------------------------------------
 	// Memory Module
 	//----------------------------------------------------------------------
+
+	assign mem_w_data = (mem_w_data_sel == `MEM_W_DATA_SEL_RF)  ? rf_r0_data:
+	                    (mem_w_data_sel == `MEM_W_DATA_SEL_MEM) ? mem_r_data;
+
+	assign mem_w_addr = (mem_w_addr_sel == `MEM_W_ADDR_SEL_A) ? pc + sext_9:
+						(mem_w_addr_sel == `MEM_W_ADDR_SEL_B) ? rf_1_data + sext_6;
+
+	assign mem_r_addr = (mem_r_addr_sel == `MEM_R_ADDR_SEL_PC) ? pc:
+						(mem_r_addr_sel == `MEM_R_ADDR_SEL_A)  ? pc + sext_9:
+						(mem_r_addr_sel == `MEM_R_ADDR_SEL_B)  ? rf_r0_data + sext_6;
 
 	// 1024-entry 16-bit memory (connect other ports)
 	Memory mem(
@@ -95,6 +118,9 @@ module PUnCDatapath(
 	assign rf_w_data = (rf_w_data_sel == `RF_W_DATA_SEL_ALU) ? alu_out:
 					   (rf_w_data_sel == `RF_W_DATA_SEL_MEM) ? mem_r_data:
 					   (rf_w_data_sel == `RF_W_DATA_SEL_PC) ? pc;
+
+	assign rf_w_addr = (rf_w_addr_sel == `RF_ADDR_SEL_A) ? ir[`REG_C]:
+					   (rf_w_addr_sel == `RF_ADDR_SEL_B) ? `R7; 
 
 	// 8-entry 16-bit register file (connect other ports)
 	RegisterFile rfile(
@@ -127,12 +153,16 @@ module PUnCDatapath(
 	// Program Counter
 	//----------------------------------------------------------------------
 
+	assign pc_ld_data = (pc_ld_data_sel == `PC_LD_DATA_SEL_A) ? pc + sext_9:
+						(pc_ld_data_sel == `PC_LD_DATA_SEL_B) ? rf_r0_data:
+						(pc_ld_data_sel == `PC_LD_DATA_SEL_C) ? pc + sext_11;
+
 	always @(posedge clk) begin
 		if (pc_clr) begin
 			pc <= 16'd0;
 		end
 		else if (pc_ld) begin
-			pc <= pc + ir[`OFFSET] - 16'd1;
+			pc <= pc + pc_ld_data - 16'd1;
 		end
 		else if (pc_inc) begin
 			pc <= pc + 16'd1;

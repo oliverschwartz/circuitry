@@ -42,11 +42,12 @@ module PUnCDatapath(
 	// ALU controls
 	input wire [1:0] alu_sel,
 
+	// Condition code signals
+	input wire cond_ld,
+
 	// Output signals to control
 	output reg [15:0] ir,
-
-	// Status registers
-	output reg n,
+	output reg n, // condition code registers
 	output reg p,
 	output reg z
 );
@@ -185,6 +186,8 @@ module PUnCDatapath(
 	//----------------------------------------------------------------------
 	// Condition code registers
 	//----------------------------------------------------------------------
+	
+	
 	always @(posedge clk) begin
 		if (rst) begin
 			n <= 1'b0;

@@ -19,36 +19,36 @@ module PUnCDatapath(
 	output wire [15:0] pc_debug_data,
 
 	// Memory controls
-	input wire mem_w_en, 
-	input wire [1:0] mem_w_addr_sel,
-	input wire mem_w_data_sel,
-	input wire [1:0] mem_r_addr_sel,
+	input mem_w_en, 
+	input [1:0] mem_w_addr_sel,
+	input mem_w_data_sel,
+	input [1:0] mem_r_addr_sel,
 	
 	// Register file controls
-	input wire rf_w_en,
-	input wire rf_r0_addr_sel,
-	input wire rf_r1_addr_sel,
-	input wire [1:0] rf_w_data_sel,
-	input wire rf_w_addr_sel,
+	input rf_w_en,
+	input rf_r0_addr_sel,
+	input rf_r1_addr_sel,
+	input [1:0] rf_w_data_sel,
+	input rf_w_addr_sel,
 
 	// Instruction register controls
-	input wire ir_ld, 
+	input ir_ld, 
 
 	// Program counter controls
-	input wire pc_ld,
-	input wire pc_clr,
-	input wire pc_inc,
-	input wire [1:0] pc_ld_data_sel,
+	input pc_ld,
+	input pc_clr,
+	input pc_inc,
+	input [1:0] pc_ld_data_sel,
 
 	// ALU controls
-	input wire [2:0] alu_sel,
+	input [2:0] alu_sel,
 
 	// Condition code signals
-	input wire cond_ld,
-	input wire cond_ld_data_sel,
+	input cond_ld,
+	input cond_ld_data_sel,
 
 	// LDI controls
-	input wire ldi_reg_ld,
+	input ldi_reg_ld,
 
 	// Output signals to control
 	output reg [15:0] ir,

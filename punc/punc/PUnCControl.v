@@ -11,41 +11,41 @@ module PUnCControl(
 
 	// Inputs from datapath
 	input [15:0] ir,
-	input wire p,
-	input wire n,
-	input wire z,
+	input p,
+	input n,
+	input z,
 
 	// Memory controls
-	output wire mem_w_en,
-	output wire [1:0] mem_w_addr_sel,
-	output wire mem_w_data_sel,
-	output wire [1:0] mem_r_addr_sel,
+	output reg mem_w_en,
+	output reg [1:0] mem_w_addr_sel,
+	output reg mem_w_data_sel,
+	output reg [1:0] mem_r_addr_sel,
 
 	// Register file controls
-	output wire rf_w_en,
-	output wire rf_r0_addr_sel,
-	output wire rf_r1_addr_sel,
-	output wire [1:0] rf_w_data_sel,
-	output wire rf_w_addr_sel,
+	output reg rf_w_en,
+	output reg rf_r0_addr_sel,
+	output reg rf_r1_addr_sel,
+	output reg [1:0] rf_w_data_sel,
+	output reg rf_w_addr_sel,
 
 	// Instruction register controls
-	output wire ir_ld,
+	output reg ir_ld,
 
 	// Program counter controls
-	output wire pc_ld,
-	output wire pc_clr,
-	output wire pc_inc,
-	output wire [1:0] pc_ld_data_sel,
+	output reg pc_ld,
+	output reg pc_clr,
+	output reg pc_inc,
+	output reg [1:0] pc_ld_data_sel,
 
 	// ALU controls
-	output wire [2:0] alu_sel,
+	output reg [2:0] alu_sel,
   
 	// Condition code controls
-	output wire cond_ld,
-	output wire cond_ld_data_sel,
+	output reg cond_ld,
+	output reg cond_ld_data_sel,
 
 	// LDI controls
-	output wire ldi_reg_ld
+	output reg ldi_reg_ld
 );
 
 	// FSM States
@@ -66,7 +66,8 @@ module PUnCControl(
 		mem_w_addr_sel = 2'd0;
 		mem_r_addr_sel = 1'd0;
 		rf_w_en = 1'd0;
-		rf_r_addr_sel = 2'd0;
+		rf_r0_addr_sel = 2'd0;
+		rf_r1_addr_sel = 2'd0;
 		rf_w_data_sel = 2'd0;
 		rf_r0_addr_sel = 1'd0;
 		rf_r1_addr_sel = 1'd0;
@@ -168,7 +169,7 @@ module PUnCControl(
 
 					// requires two cycles
 					`OC_LDI: begin
-						ld_reg_ld = 1'b1;
+						ldi_reg_ld = 1'b1;
 						mem_r_addr_sel = `MEM_R_ADDR_SEL_A;
 					end
 
@@ -255,11 +256,19 @@ module PUnCControl(
 			STATE_FETCH: begin
 				next_state = STATE_DECODE;
 			end
+			STATE_DECODE: begin
+				next_state = STATE_EXECUTE;
+			end
 			STATE_EXECUTE: begin
+				if (ir[`OC] == `OC_LDI) begin
+					next_state = STATE_EXECUTE_I;	
+				end
+				else begin 
+					next_state = STATE_FETCH;
+				end
 			end
 			STATE_EXECUTE_I: begin
-			end
-			STATE_HALT: begin
+				next_state = STATE_FETCH;
 			end
 		endcase
 	end

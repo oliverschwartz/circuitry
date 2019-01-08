@@ -57,7 +57,7 @@ module PUnCControl(
    	localparam STATE_HALT      = 3'b101;
 
 	// State, Next State
-	reg [4:0] state, next_state;
+	reg [2:0] state, next_state;
 
 	// Output Combinational Logic
 	always @( * ) begin
@@ -242,6 +242,10 @@ module PUnCControl(
 				rf_w_addr_sel = `RF_W_ADDR_SEL_A;
 				mem_r_addr_sel = `MEM_R_ADDR_SEL_LDI_REG;
 			end
+
+			STATE_HALT: begin
+
+			end
 		endcase
 	end
 
@@ -262,6 +266,9 @@ module PUnCControl(
 			STATE_EXECUTE: begin
 				if (ir[`OC] == `OC_LDI) begin
 					next_state = STATE_EXECUTE_I;	
+				end
+				else if (ir[`OC] == `OC_HLT) begin
+					next_state = STATE_HALT;
 				end
 				else begin 
 					next_state = STATE_FETCH;

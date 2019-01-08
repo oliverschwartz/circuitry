@@ -17,7 +17,7 @@ module PUnCControl(
 
 	// Memory controls
 	output wire mem_w_en,
-	output wire mem_w_addr_sel,
+	output wire [1:0] mem_w_addr_sel,
 	output wire mem_w_data_sel,
 	output wire [1:0] mem_r_addr_sel,
 
@@ -60,7 +60,7 @@ module PUnCControl(
 	always @( * ) begin
 		// Set default values for outputs here (prevents implicit latching)
 		mem_w_en = 1'd0;
-		mem_w_addr_sel = 1'd0;
+		mem_w_addr_sel = 2'd0;
 		mem_r_addr_sel = 1'd0;
 		rf_w_en = 1'd0;
 		rf_r_addr_sel = 2'd0;
@@ -211,6 +211,9 @@ module PUnCControl(
 
 					`OC_STI: begin // incomplete
 						mem_w_en = 1'b1;
+						mem_w_addr_sel = `MEM_W_ADDR_SEL_MEMDATA;
+						rf_r0_addr_sel = `RF_R0_ADDR_SEL_B;
+						mem_r_addr_sel = `MEM_R_ADDR_SEL_A;
 					end
 
 					`OC_STR: begin

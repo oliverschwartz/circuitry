@@ -60,8 +60,9 @@
 // Memory Module
 `define MEM_W_DATA_SEL_RF   1'b0 // write data selects
 `define MEM_W_DATA_SEL_MEM  1'b1
-`define MEM_W_ADDR_SEL_A    1'b0 // pc + sext_9
-`define MEM_W_ADDR_SEL_B    1'b1 // rf_1_data + sext_6
+`define MEM_W_ADDR_SEL_A    2'b00 // pc + sext_9
+`define MEM_W_ADDR_SEL_B    2'b01 // rf_1_data + sext_6
+`define MEM_W_ADDR_SEL_MEMDATA 2'b10 // mem_r_data
 `define MEM_R_ADDR_SEL_PC   2'b00  
 `define MEM_R_ADDR_SEL_A    2'b01 // pc + sext_9
 `define MEM_R_ADDR_SEL_B    2'b10 // rf_r0_data + sext_6

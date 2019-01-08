@@ -20,7 +20,7 @@ module PUnCDatapath(
 
 	// Memory controls
 	input wire mem_w_en, 
-	input wire mem_w_addr_sel,
+	input wire [1:0] mem_w_addr_sel,
 	input wire mem_w_data_sel,
 	input wire [1:0] mem_r_addr_sel,
 	
@@ -105,6 +105,7 @@ module PUnCDatapath(
 
 	assign mem_w_addr = (mem_w_addr_sel == `MEM_W_ADDR_SEL_A) ? pc + sext_9:
 						(mem_w_addr_sel == `MEM_W_ADDR_SEL_B) ? rf_r1_data + sext_6:
+						(mem_w_addr_sel == `MEM_W_ADDR_SEL_MEMDATA) ? mem_r_data:
 						16'd0;
 
 	assign mem_r_addr = (mem_r_addr_sel == `MEM_R_ADDR_SEL_PC) ? pc:

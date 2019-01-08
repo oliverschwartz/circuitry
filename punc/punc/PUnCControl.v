@@ -38,7 +38,7 @@ module PUnCControl(
 	output wire [1:0] pc_ld_data_sel,
 
 	// ALU controls
-	output wire [2:0] alu_sel
+	output wire [2:0] alu_sel,
   
 	// Condition code controls
 	output wire cond_ld,

@@ -80,7 +80,7 @@ module PUnCDatapath(
 	// PC load data
 	wire [15:0] pc_ld_data;
 
-	// Condition code data
+	// Condition code data (from either alu_out or rf_w_data)
 	wire [15:0] cond_data;
 
 	// Sign extension module

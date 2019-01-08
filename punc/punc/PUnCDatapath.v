@@ -21,7 +21,8 @@ module PUnCDatapath(
 	// Memory controls
 	input wire mem_w_en, 
 	input wire mem_w_addr_sel,
-	input wire mem_r_addr_sel,
+	input wire mem_w_data_sel,
+	input wire [1:0] mem_r_addr_sel,
 	
 	// Register file controls
 	input wire rf_w_en,
@@ -55,7 +56,6 @@ module PUnCDatapath(
 
 	// Local Registers
 	reg  [15:0] pc;
-	reg  [15:0] ir;
 
 	// Memory read/write channels
 	wire [15:0] mem_w_addr;
@@ -80,13 +80,17 @@ module PUnCDatapath(
 	// PC load data
 	wire [15:0] pc_ld_data;
 
-
+	// Sign extension module
+	wire [15:0] sext_11;
+	wire [15:0] sext_9;
+	wire [15:0] sext_6;
+	wire [15:0] sext_5;
 
 	// Sign Extension Module
-	assign wire [15:0] sext_11 = {{5{1'b0}}, ir[`10:0]};
-	assign wire [15:0] sext_9  = {{7{}}, ir[`8:0]};
-	assign wire [15:0] sext_6  = {{10{ir[5]}, ir[`5:0]};
-	assign wire [15:0] sext_5  = {{11{ir[4]}}, ir[4:0]};
+	assign sext_11 = {{5{ir[10]}}, ir[10:0]};
+	assign sext_9  = {{7{ir[8]}}, ir[8:0]};
+	assign sext_6  = {{10{ir[5]}}, ir[5:0]};
+	assign sext_5  = {{11{ir[4]}}, ir[4:0]};
 
 	//----------------------------------------------------------------------
 	// Memory Module
@@ -126,10 +130,11 @@ module PUnCDatapath(
 
 	assign rf_w_data = (rf_w_data_sel == `RF_W_DATA_SEL_ALU) ? alu_out:
 					   (rf_w_data_sel == `RF_W_DATA_SEL_MEM) ? mem_r_data:
-					   (rf_w_data_sel == `RF_W_DATA_SEL_PC) ? pc;
+					   (rf_w_data_sel == `RF_W_DATA_SEL_PC) ? pc:
+					   (rf_w_data_sel == `RF_W_DATA_SEL_A) ? pc + sext_9;
 
-	assign rf_w_addr = (rf_w_addr_sel == `RF_ADDR_SEL_A) ? ir[`REG_C]:
-					   (rf_w_addr_sel == `RF_ADDR_SEL_B) ? `R7; 
+	assign rf_w_addr = (rf_w_addr_sel == `RF_W_ADDR_SEL_A) ? ir[`REG_C]:
+					   (rf_w_addr_sel == `RF_W_ADDR_SEL_B) ? `R7; 
 
 	// 8-entry 16-bit register file (connect other ports)
 	RegisterFile rfile(

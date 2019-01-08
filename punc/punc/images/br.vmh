@@ -1,24 +1,24 @@
-102A   // ADD R0, R0, #10
-0803   // BRn 3
-1261   // ADD R1, R1, #1
-0201   // BRp 1
+102A   // ADD R0, R0, #10 // HERE
+0803   // BRn 3           // HERE
+1261   // ADD R1, R1, #1  // HERE
+0201   // BRp 1           // HERE
 14BF   // ADD R2, R2, #-1
-16E0   // ADD R3, R3, #0
-0A03   // BRnp 3
-1261   // ADD R1, R1, #1
-0401   // BRz 1
-1261   // ADD R1, R1, #1
-0E03   // BRnzp 3
-1261   // ADD R1, R1, #1
-1261   // ADD R1, R1, #1
-1261   // ADD R1, R1, #1
-193B   // ADD R4, R4, #-5
-0C01   // BRnz 1
+16E0   // ADD R3, R3, #0  // HERE
+0A03   // BRnp 3          // HERE
+1261   // ADD R1, R1, #1  // HERE
+0401   // BRz 1           // HERE
+1261   // ADD R1, R1, #1  // HERE
+0E03   // BRnzp 3         // HERE
+1261   // ADD R1, R1, #1  
 1261   // ADD R1, R1, #1
 1261   // ADD R1, R1, #1
-0C01   // BRnz 1
+193B   // ADD R4, R4, #-5 // HERE
+0C01   // BRnz 1          // HERE
 1261   // ADD R1, R1, #1
-F000   // HALT
+1261   // ADD R1, R1, #1  // HERE
+0C01   // BRnz 1          // HERE
+1261   // ADD R1, R1, #1  // HERE
+F000   // HALT            // HERE
 0000
 0000
 0000

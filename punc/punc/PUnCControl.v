@@ -199,7 +199,7 @@ module PUnCControl(
 						alu_sel = `ALU_FN_NOT;
 						rf_w_addr_sel = `RF_W_ADDR_SEL_A;
 						rf_w_data_sel = `RF_W_DATA_SEL_ALU;
-						rf_w_en = 1'b0;
+						rf_w_en = 1'b1;
 						rf_r0_addr_sel = `RF_R0_ADDR_SEL_A;
 
 						// set condition codes
@@ -241,6 +241,10 @@ module PUnCControl(
 				rf_w_data_sel = `RF_W_DATA_SEL_MEM;
 				rf_w_addr_sel = `RF_W_ADDR_SEL_A;
 				mem_r_addr_sel = `MEM_R_ADDR_SEL_LDI_REG;
+
+				// set condition codes
+				cond_ld = 1'b1;
+				cond_ld_data_sel = `COND_LD_DATA_SEL_RF;
 			end
 
 			STATE_HALT: begin

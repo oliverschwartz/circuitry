@@ -200,7 +200,7 @@ module PUnCDatapath(
 			pc <= 16'd0;
 		end
 		else if (pc_ld) begin
-			pc <= pc + pc_ld_data - 16'd1;
+			pc <= pc_ld_data;
 		end
 		else if (pc_inc) begin
 			pc <= pc + 16'd1;
@@ -233,9 +233,9 @@ module PUnCDatapath(
 			z <= 1'b0;
 		end
 		else if (cond_ld) begin
-			p <= (cond_data > 16'b0);
-			n <= (cond_data < 16'b0);
-			z <= (cond_data == 16'b0);
+			n <= ($signed(cond_data) < $signed(16'd0)) ? 1'b1 : 1'b0;
+			z <= (cond_data == 16'd0) ? 1'b1 : 1'b0;
+			p <= ($signed(cond_data) > $signed(16'd0)) ? 1'b1 : 1'b0;
 		end		
 	end
 

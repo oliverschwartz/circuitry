@@ -58,21 +58,21 @@
 `define RF_W_ADDR_SEL_B     1'b1  // 111 (R7)
 
 // Memory Module
-`define MEM_W_DATA_SEL_RF  = 1'b0 // write data selects
-`define MEM_W_DATA_SEL_MEM = 1'b1
-`define MEM_W_ADDR_SEL_A   = 1'b0 // pc + sext_9
-`define MEM_W_ADDR_SEL_B   = 1'b1 // rf_1_data + sext_6
-`define MEM_R_ADDR_SEL_PC  = 2'b00  
-`define MEM_R_ADDR_SEL_A   = 2'b01 // pc + sext_9
-`define MEM_R_ADDR_SEL_B   = 2'b10 // rf_r0_data + sext_6
+`define MEM_W_DATA_SEL_RF   1'b0 // write data selects
+`define MEM_W_DATA_SEL_MEM  1'b1
+`define MEM_W_ADDR_SEL_A    1'b0 // pc + sext_9
+`define MEM_W_ADDR_SEL_B    1'b1 // rf_1_data + sext_6
+`define MEM_R_ADDR_SEL_PC   2'b00  
+`define MEM_R_ADDR_SEL_A    2'b01 // pc + sext_9
+`define MEM_R_ADDR_SEL_B    2'b10 // rf_r0_data + sext_6
 
 // Program Counter
-`define PC_LD_DATA_SEL_A   = 2'b00 // pc + sext_9
-`define PC_LD_DATA_SEL_B   = 2'b01 // rf_r0_data (BaseR)
-`define PC_LD_DATA_SEL_C   = 2'b10 // pc + sext_11
+`define PC_LD_DATA_SEL_A    2'b00 // pc + sext_9
+`define PC_LD_DATA_SEL_B    2'b01 // rf_r0_data (BaseR)
+`define PC_LD_DATA_SEL_C    2'b10 // pc + sext_11
 
 // Condition Code registers
-`define COND_LD_DATA_SEL_ALU = 1'b0 // alu_out
-`define COND_LD_DATA_SEL_RF  = 1'b1 // rf_w_data
+`define COND_LD_DATA_SEL_ALU  1'b0 // alu_out
+`define COND_LD_DATA_SEL_RF   1'b1 // rf_w_data
 
 

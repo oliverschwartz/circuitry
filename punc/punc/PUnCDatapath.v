@@ -80,6 +80,9 @@ module PUnCDatapath(
 	// PC load data
 	wire [15:0] pc_ld_data;
 
+	// Condition code data
+	wire [15:0] cond_data;
+
 	// Sign extension module
 	wire [15:0] sext_11;
 	wire [15:0] sext_9;
@@ -97,14 +100,17 @@ module PUnCDatapath(
 	//----------------------------------------------------------------------
 
 	assign mem_w_data = (mem_w_data_sel == `MEM_W_DATA_SEL_RF)  ? rf_r0_data:
-	                    (mem_w_data_sel == `MEM_W_DATA_SEL_MEM) ? mem_r_data;
+	                    (mem_w_data_sel == `MEM_W_DATA_SEL_MEM) ? mem_r_data:
+						16'd0;
 
 	assign mem_w_addr = (mem_w_addr_sel == `MEM_W_ADDR_SEL_A) ? pc + sext_9:
-						(mem_w_addr_sel == `MEM_W_ADDR_SEL_B) ? rf_r1_data + sext_6;
+						(mem_w_addr_sel == `MEM_W_ADDR_SEL_B) ? rf_r1_data + sext_6:
+						16'd0;
 
 	assign mem_r_addr = (mem_r_addr_sel == `MEM_R_ADDR_SEL_PC) ? pc:
 						(mem_r_addr_sel == `MEM_R_ADDR_SEL_A)  ? pc + sext_9:
-						(mem_r_addr_sel == `MEM_R_ADDR_SEL_B)  ? rf_r0_data + sext_6;
+						(mem_r_addr_sel == `MEM_R_ADDR_SEL_B)  ? rf_r0_data + sext_6:
+						16'd0;
 
 	// 1024-entry 16-bit memory (connect other ports)
 	Memory mem(
@@ -124,22 +130,28 @@ module PUnCDatapath(
 	//----------------------------------------------------------------------
 
 	assign rf_r0_addr = (rf_r0_addr_sel == `RF_R0_ADDR_SEL_A) ? ir[`REG_B]:
-						(rf_r0_addr_sel == `RF_R0_ADDR_SEL_B) ? ir[`REG_C];
+						(rf_r0_addr_sel == `RF_R0_ADDR_SEL_B) ? ir[`REG_C]:
+						3'd0;
+
 	assign rf_r1_addr = (rf_r1_addr_sel == `RF_R1_ADDR_SEL_A) ? ir[`REG_A]:
-						(rf_r1_addr_sel == `RF_R1_ADDR_SEL_B) ? ir[`REG_B];
+						(rf_r1_addr_sel == `RF_R1_ADDR_SEL_B) ? ir[`REG_B]:
+						3'd0;
 
 	assign rf_w_data = (rf_w_data_sel == `RF_W_DATA_SEL_ALU) ? alu_out:
 					   (rf_w_data_sel == `RF_W_DATA_SEL_MEM) ? mem_r_data:
 					   (rf_w_data_sel == `RF_W_DATA_SEL_PC) ? pc:
-					   (rf_w_data_sel == `RF_W_DATA_SEL_A) ? pc + sext_9;
+					   (rf_w_data_sel == `RF_W_DATA_SEL_A) ? pc + sext_9:
+					   16'd0;
 
 	assign rf_w_addr = (rf_w_addr_sel == `RF_W_ADDR_SEL_A) ? ir[`REG_C]:
-					   (rf_w_addr_sel == `RF_W_ADDR_SEL_B) ? `R7; 
+					   (rf_w_addr_sel == `RF_W_ADDR_SEL_B) ? `R7:
+					   3'd0;
 
 	assign rf_w_data = (rf_w_data_sel == `RF_W_DATA_SEL_ALU) ? alu_out:
 					   (rf_w_data_sel == `RF_W_DATA_SEL_MEM) ? mem_r_data:
 					   (rf_w_data_sel == `RF_W_DATA_SEL_PC) ? pc:
-					   (rf_w_data_sel == `RF_W_DATA_SEL_A) ? pc + sext_9;
+					   (rf_w_data_sel == `RF_W_DATA_SEL_A) ? pc + sext_9:
+					   16'd0;
 
 	// 8-entry 16-bit register file (connect other ports)
 	RegisterFile rfile(
@@ -174,7 +186,8 @@ module PUnCDatapath(
 
 	assign pc_ld_data = (pc_ld_data_sel == `PC_LD_DATA_SEL_A) ? pc + sext_9:
 						(pc_ld_data_sel == `PC_LD_DATA_SEL_B) ? rf_r0_data:
-						(pc_ld_data_sel == `PC_LD_DATA_SEL_C) ? pc + sext_11;
+						(pc_ld_data_sel == `PC_LD_DATA_SEL_C) ? pc + sext_11:
+						16'd0;
 
 	always @(posedge clk) begin
 		if (pc_clr) begin
@@ -196,14 +209,16 @@ module PUnCDatapath(
 	                 (alu_sel == `ALU_FN_NOT) ? (~rf_r0_data) :
 					 (alu_sel == `ALU_FN_AND) ? (rf_r0_data & rf_r1_data) :
 					 (alu_sel == `ALU_FN_AND_I) ? (rf_r0_data + sext_5) :
-					 (alu_sel == `ALU_FN_PASS) ? rf_r0_data;
+					 (alu_sel == `ALU_FN_PASS) ? rf_r0_data:
+					 16'd0;
 
 	//----------------------------------------------------------------------
 	// Condition code registers
 	//----------------------------------------------------------------------
 	// condition code can test: alu_out OR rf_w_data
 	assign cond_data = (cond_ld_data_sel == `COND_LD_DATA_SEL_ALU) ? alu_out:
-					   (cond_ld_data_sel == `COND_LD_DATA_SEL_RF)  ? rf_w_data;
+					   (cond_ld_data_sel == `COND_LD_DATA_SEL_RF)  ? rf_w_data:
+					   16'd0;
 	
 	always @(posedge clk) begin
 		if (rst) begin

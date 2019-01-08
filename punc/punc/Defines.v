@@ -66,6 +66,7 @@
 `define MEM_R_ADDR_SEL_PC   2'b00  
 `define MEM_R_ADDR_SEL_A    2'b01 // pc + sext_9
 `define MEM_R_ADDR_SEL_B    2'b10 // rf_r0_data + sext_6
+`define MEM_R_ADDR_SEL_LDI_REG 2'b11 // read from tmp register
 
 // Program Counter
 `define PC_LD_DATA_SEL_A    2'b00 // pc + sext_9

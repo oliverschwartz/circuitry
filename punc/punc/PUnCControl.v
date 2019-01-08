@@ -42,7 +42,10 @@ module PUnCControl(
   
 	// Condition code controls
 	output wire cond_ld,
-	output wire cond_ld_data_sel
+	output wire cond_ld_data_sel,
+
+	// LDI controls
+	output wire ldi_reg_ld
 );
 
 	// FSM States
@@ -165,7 +168,8 @@ module PUnCControl(
 
 					// requires two cycles
 					`OC_LDI: begin
-						// set condition codes
+						ld_reg_ld = 1'b1;
+						mem_r_addr_sel = `MEM_R_ADDR_SEL_A;
 					end
 
 					`OC_LDR: begin
@@ -231,7 +235,11 @@ module PUnCControl(
 			end
 
 			STATE_EXECUTE_I: begin
-				// second phase for LDI
+				// in second phase of LDI
+				rf_w_en = 1'b1;
+				rf_w_data_sel = `RF_W_DATA_SEL_MEM;
+				rf_w_addr_sel = `RF_W_ADDR_SEL_A;
+				mem_r_addr_sel = `MEM_R_ADDR_SEL_LDI_REG;
 			end
 		endcase
 	end

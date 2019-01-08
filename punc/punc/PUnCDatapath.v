@@ -47,6 +47,9 @@ module PUnCDatapath(
 	input wire cond_ld,
 	input wire cond_ld_data_sel,
 
+	// LDI controls
+	input wire ldi_reg_ld,
+
 	// Output signals to control
 	output reg [15:0] ir,
 	output reg n, // condition code registers
@@ -56,6 +59,7 @@ module PUnCDatapath(
 
 	// Local Registers
 	reg  [15:0] pc;
+	reg [15:0] ldi_reg; // temporary register for LDI instruction
 
 	// Memory read/write channels
 	wire [15:0] mem_w_addr;
@@ -111,6 +115,7 @@ module PUnCDatapath(
 	assign mem_r_addr = (mem_r_addr_sel == `MEM_R_ADDR_SEL_PC) ? pc:
 						(mem_r_addr_sel == `MEM_R_ADDR_SEL_A)  ? pc + sext_9:
 						(mem_r_addr_sel == `MEM_R_ADDR_SEL_B)  ? rf_r0_data + sext_6:
+						(mem_r_addr_sel == `MEM_R_ADDR_SEL_LDI_REG) ? ldi_reg:
 						16'd0;
 
 	// 1024-entry 16-bit memory (connect other ports)
@@ -234,5 +239,16 @@ module PUnCDatapath(
 		end		
 	end
 
+	//----------------------------------------------------------------------
+	// LDI logic
+	//----------------------------------------------------------------------
+	always @(posedge clk) begin
+		if (rst) begin
+			ldi_reg <= 16'd0;
+		end
+		if (ldi_reg_ld) begin
+			ldi_reg <= mem_r_data;
+		end
+	end
 
 endmodule

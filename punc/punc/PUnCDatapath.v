@@ -214,7 +214,7 @@ module PUnCDatapath(
 					 (alu_sel == `ALU_FN_ADD_I) ? (rf_r0_data + sext_5) :
 	                 (alu_sel == `ALU_FN_NOT) ? (~rf_r0_data) :
 					 (alu_sel == `ALU_FN_AND) ? (rf_r0_data & rf_r1_data) :
-					 (alu_sel == `ALU_FN_AND_I) ? (rf_r0_data + sext_5) :
+					 (alu_sel == `ALU_FN_AND_I) ? (rf_r0_data & sext_5) :
 					 (alu_sel == `ALU_FN_PASS) ? rf_r0_data:
 					 16'd0;
 

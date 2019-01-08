@@ -226,6 +226,10 @@ module PUnCControl(
 					end
 				endcase
 			end
+
+			STATE_EXECUTE_I: begin
+				// second phase for LDI
+			end
 		endcase
 	end
 
@@ -252,10 +256,10 @@ module PUnCControl(
 	// State Update Sequential Logic
 	always @(posedge clk) begin
 		if (rst) begin
-			state < = STATE_INIT;
+			state <= STATE_INIT;
 		end
 		else begin
-			state < = next_state;
+			state <= next_state;
 		end
 	end
 

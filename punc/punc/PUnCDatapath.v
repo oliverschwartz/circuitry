@@ -100,7 +100,7 @@ module PUnCDatapath(
 	                    (mem_w_data_sel == `MEM_W_DATA_SEL_MEM) ? mem_r_data;
 
 	assign mem_w_addr = (mem_w_addr_sel == `MEM_W_ADDR_SEL_A) ? pc + sext_9:
-						(mem_w_addr_sel == `MEM_W_ADDR_SEL_B) ? rf_1_data + sext_6;
+						(mem_w_addr_sel == `MEM_W_ADDR_SEL_B) ? rf_r1_data + sext_6;
 
 	assign mem_r_addr = (mem_r_addr_sel == `MEM_R_ADDR_SEL_PC) ? pc:
 						(mem_r_addr_sel == `MEM_R_ADDR_SEL_A)  ? pc + sext_9:
@@ -135,6 +135,11 @@ module PUnCDatapath(
 
 	assign rf_w_addr = (rf_w_addr_sel == `RF_W_ADDR_SEL_A) ? ir[`REG_C]:
 					   (rf_w_addr_sel == `RF_W_ADDR_SEL_B) ? `R7; 
+
+	assign rf_w_data = (rf_w_data_sel == `RF_W_DATA_SEL_ALU) ? alu_out:
+					   (rf_w_data_sel == `RF_W_DATA_SEL_MEM) ? mem_r_data:
+					   (rf_w_data_sel == `RF_W_DATA_SEL_PC) ? pc:
+					   (rf_w_data_sel == `RF_W_DATA_SEL_A) ? pc + sext_9;
 
 	// 8-entry 16-bit register file (connect other ports)
 	RegisterFile rfile(

@@ -129,93 +129,93 @@ module PUnCTATest;
 		$display("=== Beginning All Tests ===");
 		$display("===========================");
 
-		// `START_TEST("addi");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(0, 16'd3);
-		// `ASSERT_REG_EQ(1, 16'd5);
-		// `ASSERT_REG_EQ(2, 16'd4);
+		`START_TEST("addi");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(0, 16'd3);
+		`ASSERT_REG_EQ(1, 16'd5);
+		`ASSERT_REG_EQ(2, 16'd4);
 
-		// `START_TEST("addr");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(2, 16'd8);
-		// `ASSERT_REG_EQ(3, 16'd13);
+		`START_TEST("addr");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(2, 16'd8);
+		`ASSERT_REG_EQ(3, 16'd13);
 
-		// `START_TEST("andi");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(1, 16'd2);
-		// `ASSERT_REG_EQ(3, 16'd0);
+		`START_TEST("andi");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(1, 16'd2);
+		`ASSERT_REG_EQ(3, 16'd0);
 
-		// `START_TEST("andr");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(2, 16'd2);
+		`START_TEST("andr");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(2, 16'd2);
 
-		// `START_TEST("not");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(2, 16'd0);
-		// `ASSERT_REG_EQ(3, 16'hFFF0);
+		`START_TEST("not");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(2, 16'd0);
+		`ASSERT_REG_EQ(3, 16'hFFF0);
 
-		// `START_TEST("ld");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(0, 16'd1);
-		// `ASSERT_REG_EQ(1, 16'd2);
-		// `ASSERT_REG_EQ(2, 16'd4);
-		// `ASSERT_REG_EQ(3, 16'h2402);
+		`START_TEST("ld");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(0, 16'd1);
+		`ASSERT_REG_EQ(1, 16'd2);
+		`ASSERT_REG_EQ(2, 16'd4);
+		`ASSERT_REG_EQ(3, 16'h2402);
 
-		// `START_TEST("ldi");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(0, 16'h00FF);
-		// `ASSERT_REG_EQ(1, 16'hFFFF);
+		`START_TEST("ldi");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(0, 16'h00FF);
+		`ASSERT_REG_EQ(1, 16'hFFFF);
 
-		// `START_TEST("ldr");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(2, 16'd2);
-		// `ASSERT_REG_EQ(3, 16'd3);
+		`START_TEST("ldr");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(2, 16'd2);
+		`ASSERT_REG_EQ(3, 16'd3);
 
-		// `START_TEST("lea");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(0, 16'd4);
-		// `ASSERT_REG_EQ(1, 16'd6);
-		// `ASSERT_REG_EQ(2, 16'd1);
+		`START_TEST("lea");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(0, 16'd4);
+		`ASSERT_REG_EQ(1, 16'd6);
+		`ASSERT_REG_EQ(2, 16'd1);
 
-		// `START_TEST("st");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_MEM_EQ(16'd0, 16'd15);
-		// `ASSERT_MEM_EQ(16'd1, 16'd10);
+		`START_TEST("st");
+		`WAIT_PC_FREEZE;
+		`ASSERT_MEM_EQ(16'd0, 16'd15);
+		`ASSERT_MEM_EQ(16'd1, 16'd10);
 
-		// `START_TEST("sti");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_MEM_EQ(16'd0, 16'd15);
+		`START_TEST("sti");
+		`WAIT_PC_FREEZE;
+		`ASSERT_MEM_EQ(16'd0, 16'd15);
 
-		// `START_TEST("str");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_MEM_EQ(16'd4, 16'd15);
+		`START_TEST("str");
+		`WAIT_PC_FREEZE;
+		`ASSERT_MEM_EQ(16'd4, 16'd15);
 
-		// `START_TEST("jmp");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(1, 16'd1);
+		`START_TEST("jmp");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(1, 16'd1);
 
-		// `START_TEST("jsr");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(0, 16'd1);
-		// `ASSERT_REG_EQ(7, 16'd1);
+		`START_TEST("jsr");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(0, 16'd1);
+		`ASSERT_REG_EQ(7, 16'd1);
 
-		// `START_TEST("jsrr");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(1, 16'd3);
+		`START_TEST("jsrr");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(1, 16'd3);
 
-		// `START_TEST("ret");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(1, 16'd1);
+		`START_TEST("ret");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(1, 16'd1);
 
-		// `START_TEST("br");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(1, 16'd5);
+		`START_TEST("br");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(1, 16'd5);
 
-		// `START_TEST("gcd");
-		// `WAIT_PC_FREEZE;
-		// `ASSERT_REG_EQ(0, 16'd3);
-		// `ASSERT_REG_EQ(1, 16'd3);
-		// `ASSERT_MEM_EQ(23, 16'd3);
+		`START_TEST("gcd");
+		`WAIT_PC_FREEZE;
+		`ASSERT_REG_EQ(0, 16'd3);
+		`ASSERT_REG_EQ(1, 16'd3);
+		`ASSERT_MEM_EQ(23, 16'd3);
 
 		`START_TEST("tri");
 		`WAIT_PC_FREEZE;

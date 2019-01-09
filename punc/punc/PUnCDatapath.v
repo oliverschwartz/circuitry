@@ -153,12 +153,6 @@ module PUnCDatapath(
 					   (rf_w_addr_sel == `RF_W_ADDR_SEL_B) ? `R7:
 					   3'd0;
 
-	assign rf_w_data = (rf_w_data_sel == `RF_W_DATA_SEL_ALU) ? alu_out:
-					   (rf_w_data_sel == `RF_W_DATA_SEL_MEM) ? mem_r_data:
-					   (rf_w_data_sel == `RF_W_DATA_SEL_PC) ? pc:
-					   (rf_w_data_sel == `RF_W_DATA_SEL_A) ? pc + sext_9:
-					   16'd0;
-
 	// 8-entry 16-bit register file (connect other ports)
 	RegisterFile rfile(
 		.clk      (clk),

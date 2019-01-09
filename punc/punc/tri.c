@@ -7,7 +7,7 @@ int main(void) {
     int valid = 1;
     int a = 3;
     int b = 4;
-    int c = 9;
+    int c = 1;
 
     int d = 5;
     int e = 8;

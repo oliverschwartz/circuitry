@@ -9,7 +9,11 @@ int main(void) {
     int b = 4;
     int c = 9;
 
-    if (!(a + b > c)) {
+    int d = 5;
+    int e = 8;
+    int f = 12;
+
+    if (!(a + b > c)) { // a + b - c must be +ve
         valid = -1;
         printf("valid: %d\n", valid);
         return 0;
